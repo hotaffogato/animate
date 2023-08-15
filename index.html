@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TEST</title>
+    <style>
+        canvas {
+            border: 1px solid black;
+        }
+        span{
+            display: block;
+        }
+        #playBtn {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <span id="x">X : </span>
+    <span id="y">Y : </span>
+    <button id="playBtn">Play</button>
+    <canvas id="canvas" width="800" height="600"></canvas>
+    <button id="clearBtn">Clear</button>
+
+    <script>
+        const canvas = document.getElementById("canvas");
+        const clearBtn = document.getElementById("clearBtn")
+        const playBtn = document.getElementById("playBtn")
+        const x = document.getElementById("x")
+        const y = document.getElementById("y")
+        const ctx = canvas.getContext("2d");
+        
+        //197.562
+        //366.170
+        //558.572
+        //268.372
+        //476.368
+        //30안팎
+        //그리는 시범 애니메이션
+        //따라그리기
+        //따라그린것을 감지(오차범위포함)
+        //clear message
+
+        const play = () => {
+
+        }
+        const drawDot = (event) => {
+            const dotX = event.clientX - canvas.offsetLeft;
+            const dotY = event.clientY - canvas.offsetTop;
+            ctx.beginPath();
+            ctx.arc(dotX, dotY, 1, 0, 1 * Math.PI);
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        let drawing = false;
+        let lastX = 0;
+        let lastY = 0;
+
+        const mouseMove = (event) => {
+            mouseX = event.clientX
+            mouseY = event.clientY
+            x.innerText = `X : ${mouseX}`
+            y.innerText = `X : ${mouseY}`
+        }
+
+        const startDrawing = (event) => {
+            drawing = true;
+            lastX = event.clientX - canvas.offsetLeft;
+            lastY = event.clientY - canvas.offsetTop;
+        }
+
+        const draw = (event) => {
+            if (!drawing) return;
+
+            let currentX = event.clientX - canvas.offsetLeft;
+            let currentY = event.clientY - canvas.offsetTop;
+            
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);
+            ctx.lineTo(currentX, currentY);
+            ctx.stroke();
+            ctx.closePath();
+
+            lastX = currentX;
+            lastY = currentY;
+        }
+        
+        const stopDrawing = () => {
+            drawing = false;
+        }
+        
+        const clear = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+        
+        playBtn.addEventListener("click", play)
+        canvas.addEventListener("mousemove", mouseMove)
+        canvas.addEventListener("click", drawDot);
+        canvas.addEventListener("mousedown", startDrawing);
+        canvas.addEventListener("mousemove", draw);
+        canvas.addEventListener("mouseup", stopDrawing);
+        canvas.addEventListener("mouseout", stopDrawing);
+        clearBtn.addEventListener("click", clear);
+    </script>
+</body>
+</html>
